@@ -13,15 +13,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserResponse registerUser(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already exists.");
         }
 
         AppUser user = new AppUser();
-        user.setEmail(request.getEmail());
-        user.setPasswordHash(request.getPlainPassword());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
+        user.setEmail(request.email());
+        user.setPasswordHash(request.plainPassword());
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
 
         AppUser savedUser = userRepository.save(user);
         return toUserResponse(savedUser);
@@ -37,14 +37,13 @@ public class UserService {
     }
 
     private UserResponse toUserResponse(AppUser user) {
-        UserResponse dto = new UserResponse();
-        dto.setUserId(user.getUserId());
-        dto.setEmail(user.getEmail());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setCreatedAt(user.getCreatedAt());
-        dto.setUpdatedAt(user.getUpdatedAt());
-        return dto;
+        return new UserResponse(
+                user.getUserId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
     }
-
 }
