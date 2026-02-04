@@ -25,18 +25,15 @@ public class Activity {
 
     private ActivityType activityType;
 
-    // Explicit unit
     private Integer durationMinutes;
 
     private Integer caloriesBurned;
 
-    // When the activity actually happened
     private LocalDateTime startedAt;
 
     @Field("metrics")
     private Map<String, Object> metrics;
 
-    // Auditing metadata
     @CreatedDate
     private LocalDateTime createdAt;
 
