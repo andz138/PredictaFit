@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: activity-service
+  mongodb:
+    uri: mongodb://localhost:27017/activitydb
