@@ -17,17 +17,11 @@ public class UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        AppUser user = new AppUser();
-        user.setEmail(request.email());
-        user.setPasswordHash(request.plainPassword());
-        user.setFirstName(request.firstName());
-        user.setLastName(request.lastName());
-
+        AppUser user = toAppUser(request);
         AppUser savedUser = userRepository.save(user);
+
         return toUserResponse(savedUser);
     }
-
-
 
     public UserResponse getUserById(String userId) {
         AppUser user = userRepository.findById(userId)
@@ -36,7 +30,16 @@ public class UserService {
         return toUserResponse(user);
     }
 
-    private UserResponse toUserResponse(AppUser user) {
+    private static AppUser toAppUser(RegisterRequest request) {
+        AppUser user = new AppUser();
+        user.setEmail(request.email());
+        user.setPasswordHash(request.plainPassword()); // later: hash it
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        return user;
+    }
+
+    private static UserResponse toUserResponse(AppUser user) {
         return new UserResponse(
                 user.getUserId(),
                 user.getEmail(),
