@@ -31,12 +31,12 @@ public class UserService {
     }
 
     private static AppUser toAppUser(RegisterRequest request) {
-        AppUser user = new AppUser();
-        user.setEmail(request.email());
-        user.setPasswordHash(request.plainPassword()); // later: hash it
-        user.setFirstName(request.firstName());
-        user.setLastName(request.lastName());
-        return user;
+        return AppUser.builder()
+                .email(request.email())
+                .passwordHash(request.plainPassword()) // later: hash it
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .build();
     }
 
     private static UserResponse toUserResponse(AppUser user) {

@@ -1,6 +1,8 @@
 package io.github.andz138.predictafit.profileservice.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +16,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AppUser
-{
+@AllArgsConstructor
+@Builder
+public class AppUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
@@ -31,6 +35,7 @@ public class AppUser
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private Role role = Role.USER;
 
     @CreationTimestamp
