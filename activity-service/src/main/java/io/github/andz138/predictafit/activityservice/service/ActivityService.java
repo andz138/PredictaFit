@@ -14,8 +14,11 @@ import java.util.List;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final UserValidationService userValidationService;
 
     public ActivityResponse createActivity(String userId, ActivityRequest request) {
+        userValidationService.assertUserExists(userId);
+
         Activity activity = toActivity(userId, request);
         Activity savedActivity = activityRepository.save(activity);
         return toResponse(savedActivity);
