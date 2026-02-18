@@ -4,10 +4,27 @@ server:
 spring:
   application:
     name: activity-service
+
   mongodb:
     uri: mongodb://localhost:27017/activitydb
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+rabbitmq:
+  exchange:
+    name: predictafit.activity.exchange
+  queue:
+    name: predictafit.activity.created.queue
+  routing:
+    key: activity.created
+
 eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
