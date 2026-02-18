@@ -4,8 +4,24 @@ server:
 spring:
   application:
     name: ai-service
+
   mongodb:
     uri: mongodb://localhost:27017/ai-recommendation-db
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  exchange:
+    name: predictafit.activity.exchange
+  queue:
+    name: predictafit.activity.created.queue
+  routing:
+    key: activity.created
+
 
 eureka:
   client:
