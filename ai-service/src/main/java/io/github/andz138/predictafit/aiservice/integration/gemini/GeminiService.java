@@ -12,18 +12,32 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.List;
 
+/**
+ * Integration service (infrastructure layer) for calling the Gemini API.
+ *
+ * Responsibilities:
+ * - Wrap a prompt string into the request DTO Gemini expects
+ * - Send the HTTP request using WebClient
+ * - Map error status codes into domain-specific exceptions
+ * - Deserialize the response DTO and return the generated text
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class GeminiService {
-
+    // Hard limit on how long we allow a Gemini call to take before failing.
     private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(15);
-
     private final WebClient geminiWebClient;
+    // Holds configuration like the Gemini endpoint URL.
     private final GeminiProperties geminiProperties;
 
+    /**
+     * Sends the given prompt to Gemini and returns the model's generated text.
+     *
+     * @param prompt Prompt text to send to Gemini
+     * @return Generated recommendation text (first candidate / first part)
+     */
     public String generateRecommendation(String prompt) {
-
         GeminiGenerateRequest request = new GeminiGenerateRequest(
                 List.of(new GeminiGenerateRequest.Content(
                         List.of(new GeminiGenerateRequest.Part(prompt))

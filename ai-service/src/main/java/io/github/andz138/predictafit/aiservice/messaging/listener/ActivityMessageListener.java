@@ -1,8 +1,10 @@
 package io.github.andz138.predictafit.aiservice.messaging.listener;
 
+import io.github.andz138.predictafit.aiservice.domain.Recommendation;
 import io.github.andz138.predictafit.aiservice.integration.gemini.GeminiRateLimitException;
 import io.github.andz138.predictafit.aiservice.messaging.event.ActivityCreatedEvent;
 import io.github.andz138.predictafit.aiservice.recommendation.service.ActivityAIService;
+import io.github.andz138.predictafit.aiservice.repository.RecommendationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -14,37 +16,29 @@ import org.springframework.stereotype.Service;
 public class ActivityMessageListener {
 
     private final ActivityAIService activityAIService;
+    private final RecommendationRepository recommendationRepository;
 
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void processActivity(ActivityCreatedEvent event) {
 
-        log.info("Received ActivityCreatedEvent. activityId={}, userId={}, type={}, durationMinutes={}",
-                event.activityId(),
-                event.userId(),
-                event.activityType(),
-                event.durationMinutes()
-        );
+        log.info("Processing activity for AI analysis. activityId={}", event.activityId());
 
         try {
+            Recommendation recommendation = activityAIService.generateRecommendation(event);
 
-            String recommendation = activityAIService.generateRecommendation(event);
+            recommendationRepository.save(recommendation);
 
-            log.info("Recommendation generated. activityId={}, preview={}",
-                    event.activityId(),
-                    preview(recommendation, 200)
-            );
+            log.info("Recommendation persisted successfully. activityId={}", event.activityId());
 
-        } catch (GeminiRateLimitException e) {
+        } catch (GeminiRateLimitException ex) {
 
-            log.warn("Gemini rate limit hit. Will retry. activityId={}", event.activityId());
+            log.warn("Rate limit encountered. Requeueing message. activityId={}", event.activityId());
+            throw ex; // Let Rabbit retry
 
-            throw e; // Let Rabbit requeue
+        } catch (Exception ex) {
 
-        } catch (Exception e) {
-
-            log.error("Unexpected AI failure. activityId={}", event.activityId(), e);
-
-            throw e; // Also requeue unless you configure otherwise
+            log.error("AI processing failed. activityId={}", event.activityId(), ex);
+            throw ex;
         }
     }
 
