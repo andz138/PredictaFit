@@ -1,3 +1,7 @@
+# Yaak (API test workspace sync)
+api-tests/
+**/api-tests/
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
