@@ -10,8 +10,7 @@ public record RegisterRequest(
         String email,
 
         @NotBlank
-        @Size(min = 8)
-        String plainPassword,
+        String keycloakId,
 
         @Size(max = 50)
         String firstName,

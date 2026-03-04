@@ -17,6 +17,11 @@ import java.net.URI;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/{keycloakId}/exists")
+    public ResponseEntity<Boolean> userExists(@PathVariable String keycloakId) {
+        return ResponseEntity.ok(userService.userExistsByKeycloakId(keycloakId));
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
@@ -35,8 +40,5 @@ public class UserController {
         return ResponseEntity.created(location).body(createdUser);
     }
 
-    @GetMapping("/{userId}/exists")
-    public ResponseEntity<Boolean> userExists(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.userExists(userId));
-    }
+
 }

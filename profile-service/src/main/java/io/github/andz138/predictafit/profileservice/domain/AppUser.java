@@ -1,18 +1,18 @@
 package io.github.andz138.predictafit.profileservice.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_users_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_users_keycloak_id", columnNames = "keycloak_id")
+        })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,11 +24,11 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String passwordHash;
+    @Column(name = "keycloak_id", nullable = false)
+    private String keycloakId;
 
     private String firstName;
     private String lastName;

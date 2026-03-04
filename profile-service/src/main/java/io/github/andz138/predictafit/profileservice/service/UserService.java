@@ -10,17 +10,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
 
     public UserResponse registerUser(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email already exists.");
-        }
 
-        AppUser user = toAppUser(request);
-        AppUser savedUser = userRepository.save(user);
-
-        return toUserResponse(savedUser);
+        return userRepository.findByKeycloakId(request.keycloakId())
+                .map(this::toUserResponse)
+                .orElseGet(() -> {
+                    AppUser user = toAppUser(request);
+                    AppUser savedUser = userRepository.save(user);
+                    return toUserResponse(savedUser);
+                });
     }
 
     public UserResponse getUserById(String userId) {
@@ -30,27 +31,28 @@ public class UserService {
         return toUserResponse(user);
     }
 
+    public boolean userExistsByKeycloakId(String keycloakId) {
+        return userRepository.existsByKeycloakId(keycloakId);
+    }
+
     private static AppUser toAppUser(RegisterRequest request) {
         return AppUser.builder()
                 .email(request.email())
-                .passwordHash(request.plainPassword()) // later: hash it
+                .keycloakId(request.keycloakId())
                 .firstName(request.firstName())
                 .lastName(request.lastName())
                 .build();
     }
 
-    private static UserResponse toUserResponse(AppUser user) {
+    private UserResponse toUserResponse(AppUser user) {
         return new UserResponse(
                 user.getUserId(),
+                user.getKeycloakId(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
-    }
-
-    public Boolean userExists(String userId) {
-        return userRepository.existsById(userId);
     }
 }
