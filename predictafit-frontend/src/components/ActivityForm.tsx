@@ -114,12 +114,16 @@ const ActivityForm = ({ onActivityAdded }: ActivityFormProps) => {
             }
             disabled={loading}
           >
-            <MenuItem value="RUNNING">🏃 Running</MenuItem>
             <MenuItem value="WALKING">🚶 Walking</MenuItem>
+            <MenuItem value="HIKING">🥾 Hiking</MenuItem>
+            <MenuItem value="RUNNING">🏃 Running</MenuItem>
             <MenuItem value="CYCLING">🚴 Cycling</MenuItem>
+            <MenuItem value="ROWING">🚣 Rowing</MenuItem>
             <MenuItem value="SWIMMING">🏊 Swimming</MenuItem>
-            <MenuItem value="WEIGHT_TRAINING">💪 Weight Training</MenuItem>
+            <MenuItem value="STRENGTH_TRAINING">💪 Strength Training</MenuItem>
+            <MenuItem value="HIIT">⚡ HIIT</MenuItem>
             <MenuItem value="YOGA">🧘 Yoga</MenuItem>
+            <MenuItem value="OTHER">🏋️ Other</MenuItem>
           </Select>
         </FormControl>
 

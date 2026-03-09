@@ -7,6 +7,11 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike"
 import PoolIcon from "@mui/icons-material/Pool"
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter"
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement"
+import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk"
+import HikingIcon from "@mui/icons-material/Hiking"
+import RowingIcon from "@mui/icons-material/Rowing"
+import BoltIcon from "@mui/icons-material/Bolt"
+import SportsIcon from "@mui/icons-material/Sports"
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment"
 import TimerIcon from "@mui/icons-material/Timer"
 
@@ -18,11 +23,16 @@ type Activity = {
 }
 
 const ACTIVITY_ICONS: Record<string, React.ReactNode> = {
+  WALKING: <DirectionsWalkIcon sx={{ fontSize: 40 }} />,
+  HIKING: <HikingIcon sx={{ fontSize: 40 }} />,
   RUNNING: <DirectionsRunIcon sx={{ fontSize: 40 }} />,
   CYCLING: <DirectionsBikeIcon sx={{ fontSize: 40 }} />,
+  ROWING: <RowingIcon sx={{ fontSize: 40 }} />,
   SWIMMING: <PoolIcon sx={{ fontSize: 40 }} />,
-  WEIGHT_TRAINING: <FitnessCenterIcon sx={{ fontSize: 40 }} />,
+  STRENGTH_TRAINING: <FitnessCenterIcon sx={{ fontSize: 40 }} />,
+  HIIT: <BoltIcon sx={{ fontSize: 40 }} />,
   YOGA: <SelfImprovementIcon sx={{ fontSize: 40 }} />,
+  OTHER: <SportsIcon sx={{ fontSize: 40 }} />,
 }
 
 const ActivityList = () => {
@@ -99,7 +109,7 @@ const ActivityList = () => {
             <CardContent sx={{ flex: 1 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
                 <Box sx={{ color: "primary.main", display: "flex", alignItems: "center" }}>
-                  {ACTIVITY_ICONS[activity.activityType] || ACTIVITY_ICONS.RUNNING}
+                  {ACTIVITY_ICONS[activity.activityType] || ACTIVITY_ICONS.OTHER}
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
                   {activity.activityType.replace(/_/g, " ")}
