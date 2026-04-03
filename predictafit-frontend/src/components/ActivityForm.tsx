@@ -132,7 +132,7 @@ const ActivityForm = ({ onActivityAdded }: ActivityFormProps) => {
           label="Duration (Minutes)"
           type="number"
           placeholder="e.g., 30"
-          inputProps={{ min: 1 }}
+          slotProps={{ htmlInput: { min: 1 } }}
           value={activity.duration}
           onChange={(event) =>
             setActivity({ ...activity, duration: event.target.value })
@@ -146,7 +146,7 @@ const ActivityForm = ({ onActivityAdded }: ActivityFormProps) => {
           label="Calories Burned"
           type="number"
           placeholder="e.g., 250"
-          inputProps={{ min: 1 }}
+          slotProps={{ htmlInput: { min: 1 } }}
           value={activity.caloriesBurned}
           onChange={(event) =>
             setActivity({ ...activity, caloriesBurned: event.target.value })
